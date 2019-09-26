@@ -38,6 +38,14 @@ body {
   }
 }
 
+@media all and (max-width: 600px) {
+  body {
+    &.is-portal {
+      margin: 0;
+      margin: 8px;
+    }
+  }
+}
 
 .hidden {
   display: none;
