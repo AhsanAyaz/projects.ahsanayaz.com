@@ -1,0 +1,8 @@
+<div class="open-source">
+  <div class="open-source__heading">
+    Projects
+  </div>
+  <div class="open-source__projects">
+    <aa-project-card *ngFor="let project of githubProjects$ | async" [project]="project"></aa-project-card>
+  </div>
+</div>

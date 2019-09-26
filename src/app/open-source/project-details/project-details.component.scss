@@ -1,0 +1,29 @@
+:host {
+  display: block;
+  width: 100%;
+  .project-card {
+    width: 100%;
+    &--portal {
+      ::ng-deep {
+        .mat-card-image {
+          height: 150px;
+          object-fit: contain;
+        }
+      }
+    }
+  }
+}
+
+body {
+  &.portal-activated {
+    :host {
+      display: block;
+      width: 100%;
+      .project-card {
+        z-index: 1000;
+        position: absolute;
+        max-width: 600px;
+      }
+    }
+  }
+}
