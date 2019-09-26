@@ -23,6 +23,22 @@ body {
         z-index: 1000;
         position: absolute;
         max-width: 600px;
+        left: 0;
+        right: 0;
+        margin: auto;
+      }
+    }
+  }
+}
+
+
+@media all and (max-width: 800px) {
+  body {
+    &.portal-activated {
+      :host {
+        .project-card {
+          max-width: 95%;
+        }
       }
     }
   }
