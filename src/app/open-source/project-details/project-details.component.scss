@@ -1,6 +1,9 @@
 :host {
   display: block;
   width: 100%;
+  .lighthouse {
+    display: none;
+  }
   .project-card {
     width: 100%;
     &--portal {
@@ -19,6 +22,9 @@ body {
     :host {
       display: block;
       width: 100%;
+      .lighthouse {
+        display: block;
+      }
       .project-card {
         z-index: 1000;
         position: absolute;
