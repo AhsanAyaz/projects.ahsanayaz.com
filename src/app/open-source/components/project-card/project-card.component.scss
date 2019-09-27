@@ -3,6 +3,18 @@
   width: 100%;
   .project {
     margin-bottom: 20px;
+    mat-card-header {
+      width: 100%;
+      .mat-card-header-text {
+        width: 100%;
+        mat-card-title, mat-card-subtitle {
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
+          max-width: 90%;
+        }
+      }
+    }
     &__link {
       color: #333;
       text-decoration: none;

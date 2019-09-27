@@ -1,7 +1,6 @@
 <mat-card
   class="project example-card">
   <mat-card-header>
-    <div mat-card-avatar class="example-header-image"></div>
     <mat-card-title [routerLink]="['/open-source/' + project.id]" routerLinkActive="router-link-active" >{{project.full_name}}</mat-card-title>
     <mat-card-subtitle>
       <a class="project__link" href="{{project.url}}">{{project.url}}</a>

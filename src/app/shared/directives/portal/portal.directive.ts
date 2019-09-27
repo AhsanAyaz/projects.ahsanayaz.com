@@ -5,8 +5,10 @@ import { Directive, Input, ElementRef } from '@angular/core';
 })
 export class PortalDirective {
   @Input() portalSrc: string;
+  @Input() contentSelector = '';
   lightboxId = Math.ceil(new Date().getTime() + ((Math.random() * 10) + 1));
   embedId = Math.ceil(new Date().getTime() + ((Math.random() * 10) + 1));
+  initialWidth: number;
   lightbox;
   embed;
   constructor(
@@ -66,20 +68,29 @@ export class PortalDirective {
       this.setPredecessorActivateUI(initialY, initialWidth);
       const predecessor: any = document.querySelector('portal');
       predecessor.activate().then(_ => {
-        document.body.classList.remove('portal-activated');
         this.setDefaultUI();
         this.setEmbedUI();
+        document.body.classList.remove('portal-activated');
       });
     });
 
     // Controlling the audio on message
     window['portalHost'].addEventListener('message', evt => {
-      switch (evt.data.control) {
+      // switch (evt.data.control) {
         // case 'prev': this.audioController.prev(); break;
         // case 'play': this.audioController.play(); break;
         // case 'pause': this.audioController.pause(); break;
         // case 'next': this.audioController.next(); break;
         // case 'hide': this.audioController.hide(); break;
+      // }
+      console.log('event data', evt.data);
+      if (evt.data.projectCardWidth) {
+        this.initialWidth = this.el.nativeElement.querySelector(this.contentSelector).clientWidth;
+        if (this.contentSelector) {
+          console.log('initial clientWidth', this.initialWidth);
+          this.el.nativeElement.querySelector(this.contentSelector).style.width = `${evt.data.projectCardWidth}px`;
+          console.log('changed clientWidth', this.el.nativeElement.querySelector(this.contentSelector).clientWidth);
+        }
       }
     });
 
@@ -151,7 +162,6 @@ export class PortalDirective {
     // this.recommendation.style.display = 'block';
     // this.recommendation.classList.add('animateOpacityTo_1_0');
     document.body.classList.remove('hide-scroll-bars');
-
     // Add writer-follow element if the writer was not followed already
     // if (!followed) {
     //     const existingWriterFollow = follow.querySelector('writer-follow');
@@ -197,6 +207,12 @@ export class PortalDirective {
     // this.main.style.transition = 'width 0.3s'
     // this.main.style.width = `${initialWidth}px`;
     // this.audioController.hide();
+    if (this.contentSelector) {
+      console.log('client width before revert', this.el.nativeElement.querySelector(this.contentSelector).clientWidth);
+      // this.el.nativeElement.querySelector(this.contentSelector).style.width = `${this.initialWidth}px`;
+      this.el.nativeElement.querySelector(this.contentSelector).style.width = `${100}%`;
+      console.log('client width after revert', this.el.nativeElement.querySelector(this.contentSelector).clientWidth);
+    }
   }
 
 }
