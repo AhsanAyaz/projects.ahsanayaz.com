@@ -9,8 +9,10 @@ export class PortalDirective {
   lightboxId = Math.ceil(new Date().getTime() + ((Math.random() * 10) + 1));
   embedId = Math.ceil(new Date().getTime() + ((Math.random() * 10) + 1));
   initialWidth: number;
+  initialY = 0;
   lightbox;
   embed;
+  projectCard;
   constructor(
     private el: ElementRef
   ) {
@@ -45,11 +47,10 @@ export class PortalDirective {
     if (!window['portalHost']) {
       return;
     }
-    let initialY = 0;
     let initialWidth = 0;
     window.addEventListener('portalactivate', (evt: any) => {
       document.body.classList.add('portal-activated');
-      initialY = evt.data.initialY;
+      this.initialY = evt.data.initialY;
       initialWidth = evt.data.initialWidth;
       // animate the audio controller
       this.setPortalActivatedUI(
@@ -57,14 +58,23 @@ export class PortalDirective {
       );
     });
 
-    this.lightbox.addEventListener('click', evt => {
-      this.setPredecessorActivateUI(initialY, initialWidth);
+    this.projectCard = this.el.nativeElement.querySelector(this.contentSelector);
+
+    this.projectCard.addEventListener('transitionend', (evt) => {
+      // We wait until the top transition finishes
+      if (evt.propertyName !== 'top') {
+          return;
+      }
       const predecessor: any = document.querySelector('portal');
       predecessor.activate().then(_ => {
         this.setDefaultUI();
         this.setEmbedUI();
         document.body.classList.remove('portal-activated');
       });
+    });
+
+    this.lightbox.addEventListener('click', evt => {
+      this.setPredecessorActivateUI(this.initialY, initialWidth);
     });
 
     // Controlling the audio on message
@@ -88,6 +98,13 @@ export class PortalDirective {
     this.lightbox.style.display = 'none';
     this.lightbox.style.opacity = 0;
 
+    this.projectCard.style.transition = '';
+    this.projectCard.style.top = '20px';
+    this.projectCard.style.width = `${100}%`;
+
+    this.projectCard.classList.remove('animateOpacityTo_1_0');
+    this.lightbox.classList.remove('animateOpacityTo_6_0');
+
     // clear any exisiting portal element on reset
     const predecessorPortal = this.embed.querySelector('portal');
     if (predecessorPortal) {
@@ -107,14 +124,23 @@ export class PortalDirective {
     // Change the theme to lightbox style having the predecessor in the back
     this.lightbox.style.display = 'block';
     this.lightbox.style.opacity = 0.6;
+    // set project card's transition
+    if (this.contentSelector) {
+      this.projectCard.style.transition = `top 0.6s cubic-bezier(.49,.86,.37,1.01),
+      width 0.3s cubic-bezier(.49,.86,.37,1.01),
+      padding-top 0.3s cubic-bezier(.49,.86,.37,1.01)`;
+    }
     this.lightbox.classList.add('animateOpacityTo_0_6');
     this.embed.appendChild(predecessor);
   }
 
   setPredecessorActivateUI(initialY, initialWidth) {
-    if (this.contentSelector) {
-      this.el.nativeElement.querySelector(this.contentSelector).style.width = `${100}%`;
-    }
+    this.projectCard.classList.remove('animateOpacityTo_0_1');
+    this.lightbox.classList.remove('animateOpacityTo_0_6');
+    setTimeout(() => {
+      this.lightbox.classList.add('animateOpacityTo_6_0');
+      this.projectCard.style.top = `${initialY}px`;
+    }, 0);
   }
 
 }

@@ -34,7 +34,10 @@ html, body {
 body {
   &.is-portal {
     margin: 0;
-    margin: 8px 1px 1px 1px;
+    margin: 1px 1px 1px 1px;
+    &.portal-activated {
+      overflow-y: scroll;
+    }
   }
 }
 
@@ -75,29 +78,59 @@ portal {
   z-index: -2;
 }
 
-.animateOpacityTo_1_0 {
+.animateOpacityTo_0_1 {
   animation: show 0.5s ease-in-out;
+}
+
+.animateOpacityTo_1_0 {
+  animation: hide 0.5s ease-in-out;
 }
 
 .animateOpacityTo_0_6 {
   animation: showLightbox 0.5s ease-in-out;
 }
 
+.animateOpacityTo_6_0 {
+  animation: hideLightBox 0.7s ease-in-out;
+}
+
+@keyframes hide {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
 @keyframes show {
   from {
-      opacity: 0;
+    opacity: 0;
   }
+
   to {
-      opacity: 1;
+    opacity: 1;
   }
 }
 
 @keyframes showLightbox {
   from {
-      opacity: 0;
+    opacity: 0;
   }
+
   to {
-      opacity: 0.6;
+    opacity: 0.6;
+  }
+}
+
+@keyframes hideLightBox {
+  from {
+    opacity: 0.6;
+  }
+
+  to {
+    opacity: 0;
   }
 }
 
